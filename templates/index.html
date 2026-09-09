@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erotisex - Clasificados Eróticos</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #0b0b12; color: #ffffff; padding: 15px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 0, 127, 0.2); padding-bottom: 15px; max-width: 1000px; margin-left: auto; margin-right: auto; }
+        
+        .logo-preview { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon {
+            background: linear-gradient(135deg, #ff007f, #7928ca);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 20px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.5);
+        }
+        .logo-text { font-size: 22px; font-weight: 700; letter-spacing: 1px; color: #ffffff; }
+        .logo-text span { color: #ff007f; }
+
+        .btn-publicar { background: linear-gradient(135deg, #ff007f, #7928ca); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 4px 12px rgba(255, 0, 127, 0.3); transition: transform 0.2s; }
+        .btn-publicar:hover { transform: translateY(-2px); }
+        
+        .erotisex-search-container {
+            background: linear-gradient(145deg, #12121a, #1a1a28);
+            border: 1px solid rgba(255, 0, 127, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 0, 127, 0.08);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            align-items: end;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #b3b3cb; }
+
+        .custom-select, .custom-input {
+            background-color: #0b0b12;
+            border: 1px solid #2d2d42;
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select:focus, .custom-input:focus { border-color: #ff007f; box-shadow: 0 0 10px rgba(255, 0, 127, 0.3); }
+
+        .btn-search-neon {
+            background: linear-gradient(135deg, #ff007f, #7928ca);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.35);
+        }
+        .btn-search-neon:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 0, 127, 0.55); }
+
+        .lista-anuncios { display: flex; flex-direction: column; gap: 15px; max-width: 1000px; margin: 0 auto; }
+        
+        .anuncio-card { 
+            display: flex; 
+            background: #12121a; 
+            border: 1px solid #222230; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            text-decoration: none; 
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        .anuncio-card:hover { border-color: #ff007f; box-shadow: 0 4px 15px rgba(255, 0, 127, 0.2); }
+        
+        .foto-container { width: 130px; min-width: 130px; height: 140px; background: #1a1a28; position: relative; }
+        .foto-container img { width: 100%; height: 100%; object-fit: cover; }
+        .sin-foto { display: flex; align-items: center; justify-content: center; height: 100%; color: #666; font-size: 12px; text-align: center; }
+
+        .info-container { padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .titulo { color: #ffffff; font-size: 16px; font-weight: bold; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .detalles { color: #b3b3cb; font-size: 13px; margin-bottom: 6px; }
+        .descripcion { color: #808099; font-size: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px; }
+        
+        .footer-card { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+        .badge { background: rgba(255, 0, 127, 0.15); border: 1px solid #ff007f; color: #ff007f; padding: 2px 8px; border-radius: 6px; font-weight: bold; }
+        .ubicacion { color: #ff007f; font-weight: bold; }
+        
+        .no-anuncios { text-align: center; color: #888; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="{{ url_for('home') }}" class="logo-preview">
+            <span class="logo-icon">E</span>
+            <span class="logo-text">EROTI<span>SEX</span></span>
+        </a>
+        <a href="{{ url_for('publicar') }}" class="btn-publicar">+ Publicar Anuncio</a>
+    </div>
+
+    <!-- PANEL DE BÚSQUEDA -->
+    <div class="erotisex-search-container">
+        <form action="{{ url_for('home') }}" method="GET" class="search-form">
+            
+            <div class="form-group">
+                <label>País</label>
+                <!-- Se asigna "selected" según lo que venga en request.args.get('pais') -->
+                <select name="pais" id="select-pais" class="custom-select" onchange="actualizarRegiones(true)">
+                    <option value="" {% if not request.args.get('pais') %}selected{% endif %}>Todos los países</option>
+                    <option value="Colombia" {% if request.args.get('pais') == 'Colombia' %}selected{% endif %}>Colombia</option>
+                    <option value="Argentina" {% if request.args.get('pais') == 'Argentina' %}selected{% endif %}>Argentina</option>
+                    <option value="Ecuador" {% if request.args.get('pais') == 'Ecuador' %}selected{% endif %}>Ecuador</option>
+                    <option value="Chile" {% if request.args.get('pais') == 'Chile' %}selected{% endif %}>Chile</option>
+                    <option value="México" {% if request.args.get('pais') == 'México' %}selected{% endif %}>México</option>
+                    <option value="Perú" {% if request.args.get('pais') == 'Perú' %}selected{% endif %}>Perú</option>
+                    <option value="España" {% if request.args.get('pais') == 'España' %}selected{% endif %}>España</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <select name="categoria" class="custom-select">
+                    <option value="">Todas las categorías</option>
+                    {% for cat in categorias %}
+                        <option value="{{ cat }}" {% if request.args.get('categoria') == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label id="lbl-departamento">Dpto / Provincia</label>
+                <select name="departamento" id="select-departamento" class="custom-select">
+                    <option value="">Elige ubicación</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Ciudad</label>
+                <input type="text" name="ciudad" class="custom-input" placeholder="Ej: Cali, Buenos Aires..." value="{{ request.args.get('ciudad', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label>Palabra clave</label>
+                <input type="text" name="busqueda" class="custom-input" placeholder="Ej: Rubia, Masaje..." value="{{ request.args.get('busqueda', '') }}">
+            </div>
+
+            <button type="submit" class="btn-search-neon">Buscar</button>
+        </form>
+    </div>
+
+    <!-- CATÁLOGO VERTICAL -->
+    <div class="lista-anuncios">
+        {% if anuncios %}
+            {% for anuncio in anuncios %}
+                <a href="{{ url_for('detalle_anuncio', anuncio_id=anuncio.id) }}" class="anuncio-card">
+                    <div class="foto-container">
+                        {% if anuncio.fotos %}
+                            {% set foto_principal = anuncio.fotos.split(',')[0] %}
+                            <img src="{{ url_for('static', filename='uploads/' + foto_principal) }}" alt="Foto anuncio">
+                        {% else %}
+                            <div class="sin-foto">Sin Foto</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="info-container">
+                        <div>
+                            <div class="titulo">{{ anuncio.titulo }}</div>
+                            <div class="detalles">
+                                <span>{{ anuncio.edad }} años</span> • 
+                                <span class="ubicacion">{{ anuncio.ciudad }} ({{ anuncio.pais }})</span>
+                            </div>
+                            <div class="descripcion">{{ anuncio.descripcion }}</div>
+                        </div>
+                        <div class="footer-card">
+                            <span class="badge">{{ anuncio.categoria }}</span>
+                            <span style="color: #ff007f; font-weight: bold;">Ver más →</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="no-anuncios">
+                <h2>No se encontraron anuncios</h2>
+                <p>Intenta buscando con otros filtros o limpia la búsqueda.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- SCRIPT JS MEJORADO PARA MANTENER LA SELECCIÓN POST-BÚSQUEDA -->
+    <script>
+        const REGIONES_POR_PAIS = {
+            "Colombia": [
+                "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá", "Caldas",
+                "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca",
+                "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño",
+                "Norte de Santander", "Putumayo", "Quindío", "Risaralda", "San Andrés y Providencia",
+                "Santander", "Sucre", "Tolima", "Valle del Cauca", "Vaupés", "Vichada"
+            ],
+            "Argentina": [
+                "Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes",
+                "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza",
+                "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis",
+                "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucumán"
+            ],
+            "Ecuador": [
+                "Azuay", "Bolívar", "Cañar", "Carchi", "Chimborazo", "Cotopaxi", "El Oro",
+                "Esmeraldas", "Galápagos", "Guayas", "Imbabura", "Loja", "Los Ríos",
+                "Manabí", "Morona Santiago", "Napo", "Orellana", "Pastaza", "Pichincha",
+                "Santa Elena", "Santo Domingo", "Sucumbíos", "Tungurahua", "Zamora Chinchipe"
+            ],
+            "Chile": [
+                "Antofagasta", "Araucanía", "Arica y Parinacota", "Atacama", "Aysén",
+                "Biobío", "Coquimbo", "La Araucanía", "Los Lagos", "Los Ríos", "Magallanes",
+                "Maule", "Ñuble", "O'Higgins", "Santiago Metropolitano", "Tarapacá", "Valparaíso"
+            ],
+            "México": [
+                "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Chiapas",
+                "Chihuahua", "Ciudad de México", "Coahuila", "Colima", "Durango", "Estado de México",
+                "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "Michoacán", "Morelos", "Nayarit",
+                "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí",
+                "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas"
+            ],
+            "Perú": [
+                "Amazonas", "Áncash", "Apurímac", "Arequipa", "Ayacucho", "Cajamarca", "Callao",
+                "Cusco", "Huancavelica", "Huánuco", "Ica", "Junín", "La Libertad", "Lambayeque",
+                "Lima", "Loreto", "Madre de Dios", "Moquegua", "Pasco", "Piura", "Puno",
+                "San Martín", "Tacna", "Tumbes", "Ucayali"
+            ],
+            "España": [
+                "Andalucía", "Aragón", "Asturias", "Baleares", "Canarias", "Cantabria",
+                "Castilla-La Mancha", "Castilla y León", "Cataluña", "Comunidad Valenciana",
+                "Extremadura", "Galicia", "La Rioja", "Madrid", "Murcia", "Navarra", "País Vasco"
+            ]
+        };
+
+        function actualizarRegiones(esCambioManual = false) {
+            const paisSelect = document.getElementById('select-pais');
+            const paisSelected = paisSelect.value;
+            const selectDep = document.getElementById('select-departamento');
+            
+            // Departamento enviado previamente por el servidor tras la búsqueda
+            const departamentoGuardado = "{{ request.args.get('departamento', '') }}";
+
+            selectDep.innerHTML = '<option value="">Elige ubicación</option>';
+
+            if (paisSelected && REGIONES_POR_PAIS[paisSelected]) {
+                REGIONES_POR_PAIS[paisSelected].forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region;
+                    option.textContent = region;
+                    
+                    // Si la página se recargó tras buscar, selecciona el departamento previo
+                    if (!esCambioManual && region === departamentoGuardado) {
+                        option.selected = true;
+                    }
+                    selectDep.appendChild(option);
+                });
+            }
+        }
+
+        // Ejecutar inmediatamente al cargar el documento
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarRegiones(false);
+        });
+    </script>
+</body>
+</html>

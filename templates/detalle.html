@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ anuncio.titulo }} - Erotisex</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0b0b12; color: #ffffff; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 800px; width: 100%; background: #12121a; border: 1px solid rgba(255, 0, 127, 0.3); border-radius: 14px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .back-btn { color: #ff007f; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        h1 { font-size: 24px; color: #ffffff; margin-bottom: 5px; }
+        .subtitle { font-size: 14px; color: #ff007f; margin-bottom: 20px; }
+        
+        .section-title { font-size: 16px; color: #b3b3cb; margin: 25px 0 10px 0; border-bottom: 1px solid #28283d; padding-bottom: 5px; text-transform: uppercase; }
+        .desc-box { background: #1a1a26; padding: 15px; border-radius: 8px; font-size: 15px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px; }
+        
+        /* Galería de fotos */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .gallery-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; border: 1px solid #28283d; }
+        
+        /* Galería de videos */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .video-grid video { width: 100%; max-height: 300px; border-radius: 10px; background: #000; border: 1px solid #28283d; }
+
+        /* Botones de contacto */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .btn-ws { background-color: #25d366; color: white; text-align: center; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; }
+        .btn-tg { background-color: #0088cc; color: white; text-align: center; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="{{ url_for('home') }}" class="back-btn">&larr; Volver al catálogo</a>
+
+    <h1>{{ anuncio.titulo }}</h1>
+    <p class="subtitle">{{ anuncio.edad }} años &bull; {{ anuncio.ciudad }}, {{ anuncio.departamento }}</p>
+
+    <!-- Fotos -->
+    {% if fotos_list and fotos_list[0] != '' %}
+        <div class="section-title">Fotos ({{ fotos_list|length }})</div>
+        <div class="gallery-grid">
+            {% for foto in fotos_list %}
+                <img src="{{ url_for('static', filename='uploads/' + foto) }}" alt="Foto del anuncio">
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Videos -->
+    {% if videos_list and videos_list[0] != '' %}
+        <div class="section-title">Videos ({{ videos_list|length }})</div>
+        <div class="video-grid">
+            {% for video in videos_list %}
+                <video controls>
+                    <source src="{{ url_for('static', filename='uploads/' + video) }}" type="video/mp4">
+                    Tu navegador no soporta reproducción de video.
+                </video>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="section-title">Descripción</div>
+    <div class="desc-box">
+        {{ anuncio.descripcion }}
+    </div>
+
+    <div class="contact-grid">
+        {% if anuncio.whatsapp %}
+            <a href="https://wa.me/{{ anuncio.whatsapp }}" target="_blank" class="btn-ws">Contactar por WhatsApp</a>
+        {% endif %}
+        {% if anuncio.telegram %}
+            <a href="https://t.me/{{ anuncio.telegram }}" target="_blank" class="btn-tg">Telegram</a>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

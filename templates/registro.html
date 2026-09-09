@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta - Erotisex</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0b0b12; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: #12121a; border: 1px solid rgba(255, 0, 127, 0.3); border-radius: 14px; padding: 30px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); }
+        .logo { font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 20px; text-decoration: none; display: block; color: #fff; }
+        .logo span { color: #ff007f; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; color: #b3b3cb; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px 12px; background: #1a1a26; border: 1px solid #28283d; border-radius: 8px; color: white; font-size: 14px; outline: none; }
+        input:focus { border-color: #ff007f; }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, #ff007f, #7928ca); border: none; color: white; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; }
+        .footer-link { text-align: center; margin-top: 20px; font-size: 13px; color: #8888a0; }
+        .footer-link a { color: #ff007f; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <a href="{{ url_for('home') }}" class="logo">EROTI<span>SEX</span></a>
+        <h2 style="text-align: center; font-size: 18px; margin-bottom: 20px;">Crear Cuenta de Anunciante</h2>
+
+        <form action="{{ url_for('registro') }}" method="POST">
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" required placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-submit">Crear Cuenta y Continuar</button>
+        </form>
+
+        <div class="footer-link">
+            ¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión aquí</a>
+        </div>
+    </div>
+
+</body>
+</html>

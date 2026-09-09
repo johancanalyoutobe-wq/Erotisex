@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar Anuncio - Erotisex</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0b0b12; color: #ffffff; padding: 30px 10px; display: flex; justify-content: center; }
+        .form-card { background: #12121a; border: 1px solid rgba(255, 0, 127, 0.3); border-radius: 14px; padding: 30px; width: 100%; max-width: 650px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); }
+        h1 { text-align: center; color: #ff007f; margin-bottom: 25px; font-size: 22px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 12px; font-weight: bold; color: #b3b3cb; margin-bottom: 6px; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 11px; background: #1a1a26; border: 1px solid #28283d; border-radius: 8px; color: white; font-size: 14px; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: #ff007f; }
+        textarea { resize: vertical; min-height: 100px; }
+        .btn-publish { width: 100%; background: linear-gradient(135deg, #ff007f, #7928ca); border: none; color: white; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <h1>Publicar Anuncio</h1>
+
+    <form action="{{ url_for('publicar') }}" method="POST" enctype="multipart/form-data">
+        
+        <div class="form-group">
+            <label>Título del Anuncio</label>
+            <input type="text" name="titulo" required placeholder="Ej: Hermosa modelo disponible hoy">
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Categoría</label>
+                <select name="categoria" required>
+                    {% for cat in categorias %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Edad</label>
+                <input type="number" name="edad" required min="18" max="99" placeholder="22">
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>País</label>
+                <select name="pais" id="pais" onchange="cargarDepartamentos()" required>
+                    <option value="">Selecciona País</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="México">México</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Chile">Chile</option>
+                    <option value="Perú">Perú</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Departamento / Estado / Provincia</label>
+                <select name="departamento" id="departamento" required>
+                    <option value="">Selecciona primero un país</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ciudad</label>
+            <input type="text" name="ciudad" required placeholder="Ej: Cali, Tuluá, Medellín...">
+        </div>
+
+        <div class="form-group">
+            <label>Descripción Completa</label>
+            <textarea name="descripcion" required placeholder="Describe tus servicios, horarios, atención..."></textarea>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>WhatsApp (Sin signo +)</label>
+                <input type="text" name="whatsapp" required placeholder="Ej: 573110000000">
+            </div>
+            <div class="form-group">
+                <label>Telegram (Opcional)</label>
+                <input type="text" name="telegram" placeholder="Ej: usuario_telegram">
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Subir Fotos (Máximo 20)</label>
+                <input type="file" name="fotos" multiple accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Subir Videos (Máximo 5)</label>
+                <input type="file" name="videos" multiple accept="video/*">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-publish">Publicar Anuncio Ahora</button>
+    </form>
+</div>
+
+<script>
+const regiones = {
+    "Colombia": ["Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", "Risaralda", "San Andrés", "Santander", "Sucre", "Tolima", "Valle del Cauca", "Vaupés", "Vichada"],
+    "México": ["Aguascalientes", "Baja California", "CDMX", "Chihuahua", "Jalisco", "Estado de México", "Nuevo León", "Puebla", "Quintana Roo", "Veracruz", "Yucatán"],
+    "Argentina": ["Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucumán"],
+    "Chile": ["Antofagasta", "Araucanía", "Atacama", "Aysén", "Biobío", "Coquimbo", "Los Lagos", "Los Ríos", "Magallanes", "Maule", "Ñuble", "O'Higgins", "Santiago", "Tarapacá", "Valparaíso"],
+    "Perú": ["Amazonas", "Áncash", "Arequipa", "Ayacucho", "Cajamarca", "Callao", "Cusco", "Huánuco", "Ica", "Junín", "La Libertad", "Lambayeque", "Lima", "Loreto", "Madre de Dios", "Moquegua", "Piura", "Puno", "San Martín", "Tacna", "Tumbes", "Ucayali"]
+};
+
+function cargarDepartamentos() {
+    const paisSelect = document.getElementById('pais');
+    const deptoSelect = document.getElementById('departamento');
+    const paisSeleccionado = paisSelect.value;
+
+    deptoSelect.innerHTML = '<option value="">Selecciona departamento</option>';
+
+    if (paisSeleccionado && regiones[paisSeleccionado]) {
+        regiones[paisSeleccionado].forEach(depto => {
+            const option = document.createElement('option');
+            option.value = depto;
+            option.textContent = depto;
+            deptoSelect.appendChild(option);
+        });
+    }
+}
+</script>
+
+</body>
+</html>

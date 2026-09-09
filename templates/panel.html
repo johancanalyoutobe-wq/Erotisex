@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Erotisex</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0b0b12; color: #ffffff; padding: 20px 15px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 0, 127, 0.2); padding-bottom: 15px; }
+        .logo-text { font-size: 22px; font-weight: 700; color: #ffffff; text-decoration: none; }
+        .logo-text span { color: #ff007f; }
+
+        .btn-header { color: #b3b3cb; text-decoration: none; font-size: 14px; margin-left: 15px; }
+        .btn-header:hover { color: #ff007f; }
+
+        .card-profile { background: #12121a; border: 1px solid rgba(255, 0, 127, 0.3); border-radius: 14px; padding: 20px; margin-bottom: 25px; }
+        .user-email { font-size: 18px; font-weight: bold; color: #ffffff; margin-bottom: 10px; }
+        .token-badge { display: inline-block; background: rgba(255, 0, 127, 0.15); border: 1px solid #ff007f; color: #ff007f; padding: 6px 14px; border-radius: 8px; font-size: 14px; font-weight: bold; margin-bottom: 10px; }
+        .alert-info { background: #1a2a1a; border: 1px solid #2e7d32; color: #81c784; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 10px; }
+
+        .top-bar-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-title { font-size: 18px; color: #ff007f; }
+        .btn-publicar-nuevo { background: linear-gradient(135deg, #ff007f, #7928ca); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; }
+
+        .anuncio-item { background: #161622; border: 1px solid #28283d; border-radius: 12px; padding: 15px; display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
+        .anuncio-img { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; background: #0b0b12; }
+        .anuncio-info { flex: 1; }
+        .anuncio-titulo { font-weight: bold; font-size: 15px; margin-bottom: 5px; color: #ffffff; }
+        .anuncio-meta { color: #8888a0; font-size: 12px; }
+
+        .actions-grid { display: flex; flex-direction: column; gap: 8px; width: 140px; }
+        .btn-action { padding: 8px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block; width: 100%; }
+        .btn-delete { background: #d32f2f; color: white; }
+        .btn-danger-account { background: transparent; border: 1px solid #d32f2f; color: #ff5252; padding: 10px; border-radius: 8px; cursor: pointer; margin-top: 30px; font-size: 13px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="{{ url_for('home') }}" class="logo-text">EROTI<span>SEX</span></a>
+            <div>
+                <a href="{{ url_for('home') }}" class="btn-header">← Inicio</a>
+                <a href="{{ url_for('logout') }}" class="btn-header">Cerrar Sesión</a>
+            </div>
+        </div>
+
+        <div class="card-profile">
+            <div class="user-email">📧 {{ usuario.email }}</div>
+            <div class="token-badge">🪙 {{ usuario.tokens }} TOKENS (COL)</div>
+            <div class="alert-info">
+                ✓ Dispones actualmente de <strong>{{ usuario.publicaciones_gratis }}</strong> publicaciones de prueba activas.
+            </div>
+        </div>
+
+        <div class="top-bar-actions">
+            <h3 class="section-title">Mis Anuncios</h3>
+            <a href="{{ url_for('publicar') }}" class="btn-publicar-nuevo">+ Publicar Anuncio</a>
+        </div>
+
+        {% if anuncios %}
+            {% for anuncio in anuncios %}
+                <div class="anuncio-item">
+                    {% if anuncio.fotos %}
+                        <img src="{{ url_for('static', filename='uploads/' + anuncio.fotos.split(',')[0]) }}" class="anuncio-img">
+                    {% else %}
+                        <div class="anuncio-img" style="display:flex;align-items:center;justify-content:center;color:#555;font-size:10px;">Sin Foto</div>
+                    {% endif %}
+                    
+                    <div class="anuncio-info">
+                        <div class="anuncio-titulo">{{ anuncio.titulo }}</div>
+                        <div class="anuncio-meta">{{ anuncio.ciudad }}, {{ anuncio.departamento }} ({{ anuncio.pais }})</div>
+                    </div>
+
+                    <div class="actions-grid">
+                        <form action="{{ url_for('eliminar_anuncio', anuncio_id=anuncio.id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas borrar este anuncio?');">
+                            <button type="submit" class="btn-action btn-delete">❌ Borrar Anuncio</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #666; font-size: 14px; margin-top: 20px;">No tienes anuncios publicados aún.</p>
+        {% endif %}
+
+        <form action="{{ url_for('eliminar_cuenta') }}" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar tu cuenta? Se borrarán todos tus anuncios de forma permanente.');">
+            <button type="submit" class="btn-danger-account">⚠️ Eliminar mi cuenta por completo</button>
+        </form>
+    </div>
+
+</body>
+</html>

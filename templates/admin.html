@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Erotisex | Moderación de Anuncios</title>
+    <style>
+        body { background-color: #0f0f12; color: white; font-family: sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #2a2a3a; padding: 12px; text-align: left; }
+        th { background-color: #1a1a24; }
+        .btn-delete { background-color: #ff2a6d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Panel de Moderación de Anuncios</h1>
+    <p><a href="/" style="color: #ff2a6d;">← Volver al sitio web</a></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Ubicación</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ad in ads %}
+            <tr>
+                <td>{{ ad.id }}</td>
+                <td>{{ ad.title }}</td>
+                <td>{{ ad.city }}, {{ ad.department }}</td>
+                <td>{{ ad.created_at }}</td>
+                <td>
+                    <form action="/admin/eliminar/{{ ad.id }}" method="POST" onsubmit="return confirm('¿Seguro deseas eliminar este anuncio?');">
+                        <button type="submit" class="btn-delete">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No hay anuncios registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

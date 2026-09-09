@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Erotisex</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0b0b12; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: #12121a; border: 1px solid rgba(255, 0, 127, 0.3); border-radius: 14px; padding: 30px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); text-align: center; }
+        .logo { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-decoration: none; display: block; color: #fff; }
+        .logo span { color: #ff007f; }
+        
+        /* BOTÓN GOOGLE */
+        .btn-google { width: 100%; background-color: #ffffff; color: #333333; border: 1px solid #cccccc; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-bottom: 20px; transition: background 0.2s; }
+        .btn-google:hover { background-color: #f1f1f1; }
+        .google-icon { width: 18px; height: 18px; }
+
+        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #666680; font-size: 12px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #28283d; }
+        .divider span { padding: 0 10px; }
+
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 13px; color: #b3b3cb; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px 12px; background: #1a1a26; border: 1px solid #28283d; border-radius: 8px; color: white; font-size: 14px; outline: none; }
+        input:focus { border-color: #ff007f; }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, #ff007f, #7928ca); border: none; color: white; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; }
+        .footer-link { margin-top: 20px; font-size: 13px; color: #8888a0; }
+        .footer-link a { color: #ff007f; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <a href="{{ url_for('home') }}" class="logo">EROTI<span>SEX</span></a>
+        <h2 style="font-size: 18px; margin-bottom: 20px;">Iniciar Sesión</h2>
+
+        <!-- BOTÓN CONECTADO A GOOGLE -->
+        <a href="{{ url_for('login_google') }}" class="btn-google">
+            <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            Continuar con Google
+        </a>
+
+        <div class="divider"><span>o ingresa con tu correo</span></div>
+
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" required placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-submit">Entrar a mi Perfil</button>
+        </form>
+
+        <div class="footer-link">
+            ¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a>
+        </div>
+    </div>
+
+</body>
+</html>
