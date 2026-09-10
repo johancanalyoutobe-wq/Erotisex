@@ -299,5 +299,31 @@ def detalle_anuncio(anuncio_id):
 
     return render_template('detalle.html', anuncio=anuncio, fotos_list=fotos_list, videos_list=videos_list)
 
+# ----------------------------------------------------
+# RUTAS DE ADMINISTRACIÓN
+# ----------------------------------------------------
+@app.route('/admin')
+def admin():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    ads = conn.execute('SELECT * FROM anuncios ORDER BY id DESC').fetchall()
+    conn.close()
+
+    return render_template('admin.html', ads=ads)
+
+@app.route('/admin/eliminar/<int:id>', methods=['POST'])
+def admin_eliminar_anuncio(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    conn.execute('DELETE FROM anuncios WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('admin'))
+
 if __name__ == '__main__':
     app.run(debug=True)
