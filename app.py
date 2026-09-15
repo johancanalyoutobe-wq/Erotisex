@@ -33,8 +33,10 @@ CATEGORIAS = [
     "Escorts / Acompañantes",
     "Masajistas",
     "Trans / Travestis",
-    "Gays / Gigolós",
-    "Amigos y Citas Virtuales",
+    "Gays",
+    "Gigolós",
+    "Amigos / Citas",
+    "Servicios Virtuales",
     "Sex Shop / Productos",
     "Agencias"
 ]
