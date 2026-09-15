@@ -207,40 +207,50 @@
 
     <!-- CATÁLOGO VERTICAL -->
     <div class="lista-anuncios">
-        {% if anuncios %}
-            {% for anuncio in anuncios %}
-                <a href="{{ url_for('detalle_anuncio', anuncio_id=anuncio.id) }}" class="anuncio-card">
-                    <div class="foto-container">
-                        {% if anuncio.fotos %}
-                            {% set foto_principal = anuncio.fotos.split(',')[0] %}
-                            <img src="{{ url_for('static', filename='uploads/' + foto_principal) }}" alt="Foto anuncio">
-                        {% else %}
-                            <div class="sin-foto">Sin Foto</div>
-                        {% endif %}
-                    </div>
+       {% if busqueda_realizada %}
+    {% if anuncios %}
+        {% for anuncio in anuncios %}
+            <a href="{{ url_for('detalle_anuncio', anuncio_id=anuncio.id) }}" class="anuncio-card">
+                <div class="foto-container">
+                    {% if anuncio.fotos %}
+                        {% set foto_principal = anuncio.fotos.split(',')[0] %}
+                        <img src="{{ url_for('static', filename='uploads/' + foto_principal) }}" alt="Foto anuncio">
+                    {% else %}
+                        <div class="sin-foto">Sin Foto</div>
+                    {% endif %}
+                </div>
 
-                    <div class="info-container">
-                        <div>
-                            <div class="titulo">{{ anuncio.titulo }}</div>
-                            <div class="detalles">
-                                <span>{{ anuncio.edad }} años</span> • 
-                                <span class="ubicacion">{{ anuncio.ciudad }} ({{ anuncio.pais }})</span>
-                            </div>
-                            <div class="descripcion">{{ anuncio.descripcion }}</div>
+                <div class="info-container">
+                    <div>
+                        <div class="titulo">{{ anuncio.titulo }}</div>
+                        <div class="detalles">
+                            <span>{{ anuncio.edad }} años</span> •
+                            <span class="ubicacion">{{ anuncio.ciudad }} ({{ anuncio.pais }})</span>
                         </div>
-                        <div class="footer-card">
-                            <span class="badge">{{ anuncio.categoria }}</span>
-                            <span style="color: #ff007f; font-weight: bold;">Ver más →</span>
-                        </div>
+                        <div class="descripcion">{{ anuncio.descripcion }}</div>
                     </div>
-                </a>
-            {% endfor %}
-        {% else %}
-            <div class="no-anuncios">
-                <h2>No se encontraron anuncios</h2>
-                <p>Intenta buscando con otros filtros o limpia la búsqueda.</p>
-            </div>
-        {% endif %}
+                    <div class="footer-card">
+                        <span class="badge">{{ anuncio.categoria }}</span>
+                        <span style="color: #ff007f; font-weight: bold;">Ver más →</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="no-anuncios">
+            <h2>No se encontraron anuncios</h2>
+            <p>Intenta buscando con otros filtros o limpia la búsqueda.</p>
+        </div>
+    {% endif %}
+{% else %}
+    <!-- Mensaje inicial de bienvenida estilo buscador -->
+    <div style="text-align: center; padding: 40px 20px; color: #cccccc;">
+        <h2 style="color: #ff007f; font-size: 24px; margin-bottom: 10px;">Encuentra Anuncios Clasificados</h2>
+        <p style="font-size: 15px; color: #888888; max-width: 500px; margin: 0 auto;">
+            Selecciona un país, provincia o categoría en el buscador superior para ver las publicaciones disponibles.
+        </p>
+    </div>
+{% endif %}
     </div>
 
     <!-- SCRIPT JS MEJORADO PARA MANTENER LA SELECCIÓN POST-BÚSQUEDA -->

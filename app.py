@@ -92,33 +92,39 @@ def home():
     ciudad = request.args.get('ciudad', '')
     busqueda = request.args.get('busqueda', '')
 
-    query = 'SELECT * FROM anuncios WHERE 1=1'
-    params = []
+    # Verificamos si el usuario realizó alguna búsqueda
+    busqueda_realizada = any([pais, categoria, departamento, ciudad, busqueda]) or ('pais' in request.args)
 
-    if pais:
-        query += ' AND pais = ?'
-        params.append(pais)
-    if categoria:
-        query += ' AND categoria = ?'
-        params.append(categoria)
-    if departamento:
-        query += ' AND departamento = ?'
-        params.append(departamento)
-    if ciudad:
-        query += ' AND ciudad LIKE ?'
-        params.append(f'%{ciudad}%')
-    if busqueda:
-        query += ' AND (titulo LIKE ? OR descripcion LIKE ?)'
-        params.append(f'%{busqueda}%')
-        params.append(f'%{busqueda}%')
+    anuncios = []
 
-    query += ' ORDER BY id DESC'
+    if busqueda_realizada:
+        query = 'SELECT * FROM anuncios WHERE 1=1'
+        params = []
 
-    conn = get_db_connection()
-    anuncios = conn.execute(query, params).fetchall()
-    conn.close()
+        if pais:
+            query += ' AND pais = ?'
+            params.append(pais)
+        if categoria:
+            query += ' AND categoria = ?'
+            params.append(categoria)
+        if departamento:
+            query += ' AND departamento = ?'
+            params.append(departamento)
+        if ciudad:
+            query += ' AND ciudad LIKE ?'
+            params.append(f'%{ciudad}%')
+        if busqueda:
+            query += ' AND (titulo LIKE ? OR descripcion LIKE ?)'
+            params.append(f'%{busqueda}%')
+            params.append(f'%{busqueda}%')
 
-    return render_template('index.html', anuncios=anuncios, categorias=CATEGORIAS)
+        query += ' ORDER BY id DESC'
+
+        conn = get_db_connection()
+        anuncios = conn.execute(query, params).fetchall()
+        conn.close()
+
+    return render_template('index.html', anuncios=anuncios, categorias=CATEGORIAS, busqueda_realizada=busqueda_realizada)
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
