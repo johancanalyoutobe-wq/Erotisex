@@ -134,7 +134,7 @@ def registro():
 
         conn = get_db_connection()
         try:
-            conn.execute('INSERT INTO usuarios (email, password, publicaciones_gratis) VALUES (?, ?, 4)', (email, password))
+            conn.execute('INSERT INTO usuarios (email, password, tokens) VALUES (?, ?, 40)', (email, password))
             conn.commit()
             usuario = conn.execute('SELECT * FROM usuarios WHERE email = ?', (email,)).fetchone()
             session['usuario_id'] = usuario['id']
@@ -223,6 +223,15 @@ def publicar():
     if 'usuario_id' not in session:
         return redirect(url_for('login'))
 
+    conn = get_db_connection()
+    usuario = conn.execute('SELECT * FROM usuarios WHERE id = ?', (session['usuario_id'],)).fetchone()
+
+    # Validar que tenga al menos 10 tokens
+    if not usuario or usuario['tokens'] < 10:
+        conn.close()
+        flash('Saldo insuficiente. Necesitas al menos 10 Tokens para publicar.')
+        return redirect(url_for('recargar'))
+
     if request.method == 'POST':
         titulo = request.form['titulo']
         categoria = request.form['categoria']
@@ -252,18 +261,26 @@ def publicar():
                 nombres_videos.append(filename)
         videos_str = ','.join(nombres_videos)
 
-        conn = get_db_connection()
+        # Guardar anuncio
         conn.execute('''
-            INSERT INTO anuncios (usuario_id, titulo, categoria, edad, pais, departamento, ciudad, descripcion, whatsapp, telegram, fotos, videos)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (session['usuario_id'], titulo, categoria, edad, pais, departamento, ciudad, descripcion, whatsapp, telegram, fotos_str, videos_str))
-        
-        conn.execute('UPDATE usuarios SET publicaciones_gratis = publicaciones_gratis - 1 WHERE id = ? AND publicaciones_gratis > 0', (session['usuario_id'],))
+            INSERT INTO anuncios (
+                usuario_id, titulo, categoria, edad, pais, 
+                departamento, ciudad, descripcion, whatsapp, telegram, fotos, videos
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            session['usuario_id'], titulo, categoria, edad, pais, 
+            departamento, ciudad, descripcion, whatsapp, telegram, fotos_str, videos_str
+        ))
+
+        # Descontar los 10 tokens al usuario
+        conn.execute('UPDATE usuarios SET tokens = tokens - 10 WHERE id = ?', (session['usuario_id'],))
         conn.commit()
         conn.close()
 
+        flash('Anuncio publicado exitosamente. Se descontaron 10 Tokens.')
         return redirect(url_for('panel'))
 
+    conn.close()
     return render_template('publicar.html', categorias=CATEGORIAS)
 
 @app.route('/eliminar_anuncio/<int:anuncio_id>', methods=['POST'])
