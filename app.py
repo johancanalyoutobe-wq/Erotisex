@@ -217,6 +217,11 @@ def panel():
     conn.close()
 
     return render_template('panel.html', usuario=usuario, anuncios=anuncios)
+@app.route('/recargar')
+def recargar():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+    return "<h1>Recarga de Tokens</h1><p>Próximamente podrás comprar paquetes aquí.</p><a href='/panel'>Volver al Panel</a>"
 
 @app.route('/publicar', methods=['GET', 'POST'])
 def publicar():
