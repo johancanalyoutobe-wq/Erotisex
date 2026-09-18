@@ -231,7 +231,7 @@ def publicar():
     conn = get_db_connection()
     usuario = conn.execute('SELECT * FROM usuarios WHERE id = ?', (session['usuario_id'],)).fetchone()
 
-    # Validar que tenga al menos 10 tokens
+    # Validar que tenga al menos 10 tokens base
     if not usuario or usuario['tokens'] < 10:
         conn.close()
         flash('Saldo insuficiente. Necesitas al menos 10 Tokens para publicar.')
@@ -248,6 +248,24 @@ def publicar():
         whatsapp = request.form['whatsapp']
         telegram = request.form.get('telegram', '')
 
+        # Opciones de destaque VIP
+        destacado_borde = 1 if request.form.get('destacado_borde') else 0
+        posicion_vip = 1 if request.form.get('posicion_vip') else 0
+
+        # Cálculo del costo total en tokens
+        costo_total = 10
+        if destacado_borde:
+            costo_total += 5
+        if posicion_vip:
+            costo_total += 10
+
+        # Validar si le alcanza el saldo para los extras
+        if usuario['tokens'] < costo_total:
+            conn.close()
+            flash(f'Saldo insuficiente. Esta publicación requiere {costo_total} Tokens y dispones de {usuario["tokens"]}.')
+            return redirect(url_for('publicar'))
+
+        # Procesar fotos
         fotos = request.files.getlist('fotos')
         nombres_fotos = []
         for foto in fotos:
@@ -257,6 +275,7 @@ def publicar():
                 nombres_fotos.append(filename)
         fotos_str = ','.join(nombres_fotos)
 
+        # Procesar videos
         videos = request.files.getlist('videos')
         nombres_videos = []
         for video in videos:
@@ -266,27 +285,31 @@ def publicar():
                 nombres_videos.append(filename)
         videos_str = ','.join(nombres_videos)
 
-        # Guardar anuncio
+        # Guardar anuncio con los campos VIP
         conn.execute('''
             INSERT INTO anuncios (
-                usuario_id, titulo, categoria, edad, pais, 
-                departamento, ciudad, descripcion, whatsapp, telegram, fotos, videos
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                usuario_id, titulo, categoria, edad, pais,
+                departamento, ciudad, descripcion, whatsapp, telegram,
+                fotos, videos, destacado_borde, posicion_vip
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            session['usuario_id'], titulo, categoria, edad, pais, 
-            departamento, ciudad, descripcion, whatsapp, telegram, fotos_str, videos_str
+            session['usuario_id'], titulo, categoria, edad, pais,
+            departamento, ciudad, descripcion, whatsapp, telegram,
+            fotos_str, videos_str, destacado_borde, posicion_vip
         ))
 
-        # Descontar los 10 tokens al usuario
-        conn.execute('UPDATE usuarios SET tokens = tokens - 10 WHERE id = ?', (session['usuario_id'],))
+        # Descontar el consumo calculado
+        nuevos_tokens = usuario['tokens'] - costo_total
+        conn.execute('UPDATE usuarios SET tokens = ? WHERE id = ?', (nuevos_tokens, session['usuario_id']))
+
         conn.commit()
         conn.close()
 
-        flash('Anuncio publicado exitosamente. Se descontaron 10 Tokens.')
+        flash(f'Anuncio publicado exitosamente. Se descontaron {costo_total} Tokens.')
         return redirect(url_for('panel'))
 
     conn.close()
-    return render_template('publicar.html', categorias=CATEGORIAS)
+    return render_template('publicar.html', categorias=CATEGORIAS, usuario=usuario)
 
 @app.route('/eliminar_anuncio/<int:anuncio_id>', methods=['POST'])
 def eliminar_anuncio(anuncio_id):
