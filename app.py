@@ -377,6 +377,31 @@ def admin_eliminar_anuncio(id):
     conn.close()
 
     return redirect(url_for('admin'))
+from flask import jsonify
+
+@app.route('/recargar')
+def recargar():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('recargar.html')
+
+
+@app.route('/webhook/pago', methods=['POST'])
+def webhook_pago():
+    data = request.get_json() or request.form
+    
+    # La pasarela envía el ID del usuario y los tokens acreditados
+    usuario_id = data.get('external_reference') or data.get('usuario_id')
+    tokens_comprados = data.get('tokens')
+    
+    if usuario_id and tokens_comprados:
+        conn = get_db_connection()
+        conn.execute('UPDATE usuarios SET tokens = tokens + ? WHERE id = ?', (int(tokens_comprados), int(usuario_id)))
+        conn.commit()
+        conn.close()
+        return jsonify({'status': 'success', 'message': 'Tokens acreditados automáticamente'}), 200
+        
+    return jsonify({'status': 'error', 'message': 'Datos inválidos'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
