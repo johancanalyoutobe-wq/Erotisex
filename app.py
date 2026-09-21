@@ -118,7 +118,7 @@ def home():
             params.append(f'%{busqueda}%')
             params.append(f'%{busqueda}%')
 
-        query += ' ORDER BY id DESC'
+        query += ' ORDER BY posicion_vip DESC, id DESC'
 
         conn = get_db_connection()
         anuncios = conn.execute(query, params).fetchall()
