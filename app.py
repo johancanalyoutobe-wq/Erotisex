@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 
@@ -377,7 +377,6 @@ def admin_eliminar_anuncio(id):
     conn.close()
 
     return redirect(url_for('admin'))
-from flask import jsonify
 
 @app.route('/recargar')
 def recargar():
